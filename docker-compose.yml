@@ -1,0 +1,16 @@
+services:
+  db:
+    image: postgres:16-alpine
+    container_name: hydrants_db
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: hydrants
+      POSTGRES_PASSWORD: hydrants
+      POSTGRES_DB: hydrants
+    ports:
+      - "5432:5432"
+    volumes:
+      - db_data:/var/lib/postgresql/data
+
+volumes:
+  db_data:

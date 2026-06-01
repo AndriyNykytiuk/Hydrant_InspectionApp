@@ -1,0 +1,103 @@
+@use '../../styles/variables' as *;
+
+.hydrant-card {
+  background: $color-surface;
+  border-radius: $radius-lg;
+  box-shadow: $shadow-sm;
+  border: 1px solid $color-border;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  transition: box-shadow 0.15s, transform 0.15s;
+
+  &:hover {
+    box-shadow: $shadow-md;
+  }
+
+  &--clickable {
+    cursor: pointer;
+
+    &:hover {
+      transform: translateY(-1px);
+    }
+
+    &:focus-visible {
+      outline: 2px solid $color-primary;
+      outline-offset: 2px;
+    }
+  }
+
+  &--ok {
+    background: rgba($color-success, 0.1);
+    border-color: rgba($color-success, 0.4);
+  }
+
+  &--pending {
+    background: rgba($color-warning, 0.12);
+    border-color: rgba($color-warning, 0.45);
+  }
+
+  &--defect {
+    background: rgba($color-danger, 0.1);
+    border-color: rgba($color-danger, 0.45);
+  }
+
+  &__header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 8px;
+  }
+
+  &__number {
+    font-size: 18px;
+    font-weight: 600;
+    color: $color-text;
+  }
+
+  &__address {
+    font-size: 13px;
+    color: $color-text-muted;
+    margin-top: 2px;
+  }
+
+  &__meta {
+    margin: 0;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 6px 12px;
+  }
+
+  &__meta-row {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+  }
+
+  &__meta-key {
+    margin: 0;
+    font-size: 11px;
+    color: $color-text-muted;
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+  }
+
+  &__meta-value {
+    margin: 0;
+    font-size: 13px;
+    color: $color-text;
+  }
+
+  &__inspector {
+    color: $color-text-muted;
+  }
+
+  &__actions {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+    padding-top: 4px;
+    border-top: 1px solid $color-border;
+  }
+}

@@ -1,0 +1,53 @@
+@use '../../styles/variables' as *;
+
+.checkbox {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  user-select: none;
+  font-size: 14px;
+
+  &--disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+
+  &__input {
+    position: absolute;
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  &__box {
+    width: 20px;
+    height: 20px;
+    border: 2px solid $color-border-strong;
+    border-radius: $radius-sm;
+    background: $color-surface;
+    transition: background 0.15s, border-color 0.15s;
+    flex-shrink: 0;
+    position: relative;
+  }
+
+  &__input:checked + &__box {
+    background: $color-primary;
+    border-color: $color-primary;
+
+    &::after {
+      content: '';
+      position: absolute;
+      left: 5px;
+      top: 1px;
+      width: 6px;
+      height: 11px;
+      border: solid white;
+      border-width: 0 2px 2px 0;
+      transform: rotate(45deg);
+    }
+  }
+
+  &__input:focus-visible + &__box {
+    box-shadow: 0 0 0 3px rgba($color-primary, 0.25);
+  }
+}

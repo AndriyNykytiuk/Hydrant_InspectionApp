@@ -1,0 +1,114 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum UserRole {
+  god
+  rw
+  viewer
+}
+
+enum NetworkType {
+  ring
+  deadend
+}
+
+model Brigade {
+  id        Int       @id @default(autoincrement())
+  name      String    @unique
+  createdAt DateTime  @default(now())
+  deletedAt DateTime?
+
+  users    User[]
+  hydrants Hydrant[]
+}
+
+model User {
+  id           Int       @id @default(autoincrement())
+  email        String    @unique
+  passwordHash String
+  fullName     String
+  role         UserRole
+  brigadeId    Int?
+  brigade      Brigade?  @relation(fields: [brigadeId], references: [id])
+  createdAt    DateTime  @default(now())
+  deletedAt    DateTime?
+
+  inspections Inspection[]
+
+  @@index([brigadeId])
+}
+
+model Hydrant {
+  id          Int         @id @default(autoincrement())
+  brigadeId   Int
+  brigade     Brigade     @relation(fields: [brigadeId], references: [id])
+  number      String
+  address     String
+  networkType NetworkType
+  diameter    Int
+  createdAt   DateTime    @default(now())
+  deletedAt   DateTime?
+
+  inspections Inspection[]
+
+  @@index([brigadeId])
+  @@index([number])
+}
+
+model Inspection {
+  id          Int      @id @default(autoincrement())
+  hydrantId   Int
+  hydrant     Hydrant  @relation(fields: [hydrantId], references: [id])
+  inspectorId Int
+  inspector   User     @relation(fields: [inspectorId], references: [id])
+  isWorking   Boolean
+  cleanPath   Boolean
+  banner      Boolean
+
+  // External condition (Зовнішній стан)
+  lidOk        Boolean?
+  bodyOk       Boolean?
+  patrubCapOk  Boolean?
+
+  // Technical condition (Технічний стан)
+  stockOk       Boolean?
+  tightnessOk   Boolean?
+  threadOk      Boolean?
+  stockHeightOk Boolean?
+
+  // Water flow check (Перевірка з пуском води)
+  waterStartOk Boolean?
+  pressureOk   Boolean?
+  flowRateOk   Boolean?
+  waterCleanOk Boolean?
+
+  // Well condition (Стан колодязя)
+  wellDepthOk Boolean?
+  wellDryOk   Boolean?
+  wellNeckOk  Boolean?
+
+  // Marking (Маркування)
+  signReadableOk Boolean?
+  signMatchesOk  Boolean?
+
+  weakness    String   @default("")
+  createdAt   DateTime @default(now())
+
+  photos Photo[]
+
+  @@index([hydrantId, createdAt])
+}
+
+model Photo {
+  id           Int        @id @default(autoincrement())
+  inspectionId Int
+  inspection   Inspection @relation(fields: [inspectionId], references: [id], onDelete: Cascade)
+  url          String
+  createdAt    DateTime   @default(now())
+}

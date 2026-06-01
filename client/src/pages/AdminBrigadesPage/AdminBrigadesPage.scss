@@ -1,0 +1,73 @@
+@use '../../styles/variables' as *;
+
+.admin-brigades {
+  &__title {
+    margin: 0 0 16px;
+    font-size: 22px;
+  }
+
+  &__form {
+    display: flex;
+    gap: 12px;
+    align-items: flex-end;
+    background: $color-surface;
+    border: 1px solid $color-border;
+    border-radius: $radius-lg;
+    padding: 12px 16px;
+    margin-bottom: 16px;
+  }
+
+  &__form-field {
+    flex: 1;
+  }
+
+  &__error {
+    background: rgba($color-danger, 0.1);
+    color: $color-danger;
+    padding: 10px 12px;
+    border-radius: $radius-md;
+    margin-bottom: 12px;
+  }
+
+  &__loading {
+    padding: 30px;
+    text-align: center;
+  }
+}
+
+.brigade-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+
+  &__item {
+    background: $color-surface;
+    border: 1px solid $color-border;
+    border-radius: $radius-md;
+    padding: 12px 16px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  &__main {
+    flex: 1;
+  }
+
+  &__name {
+    font-weight: 500;
+  }
+
+  &__meta {
+    font-size: 12px;
+    color: $color-text-muted;
+  }
+
+  &__actions {
+    display: flex;
+    gap: 6px;
+  }
+}

@@ -1,0 +1,53 @@
+@use '../../styles/variables' as *;
+
+.login-page {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  background: linear-gradient(135deg, $color-accent 0%, $color-primary-dark 100%);
+}
+
+.login-form {
+  background: $color-surface;
+  border-radius: $radius-lg;
+  box-shadow: $shadow-lg;
+  padding: 32px;
+  width: 100%;
+  max-width: 380px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+
+  &__brand {
+    text-align: center;
+    margin-bottom: 8px;
+  }
+
+  &__logo {
+    font-size: 48px;
+    display: block;
+  }
+
+  &__title {
+    margin: 8px 0 4px;
+    font-size: 24px;
+    color: $color-text;
+  }
+
+  &__subtitle {
+    margin: 0;
+    color: $color-text-muted;
+    font-size: 13px;
+  }
+
+  &__error {
+    background: rgba($color-danger, 0.1);
+    color: $color-danger;
+    padding: 10px 12px;
+    border-radius: $radius-md;
+    font-size: 13px;
+    border: 1px solid rgba($color-danger, 0.3);
+  }
+}

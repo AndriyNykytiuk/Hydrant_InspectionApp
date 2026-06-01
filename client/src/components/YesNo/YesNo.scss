@@ -1,0 +1,49 @@
+@use '../../styles/variables' as *;
+
+.yes-no {
+  display: inline-flex;
+  border: 1px solid $color-border-strong;
+  border-radius: $radius-md;
+  overflow: hidden;
+  background: $color-surface;
+
+  &__input {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    opacity: 0;
+    cursor: pointer;
+    appearance: none;
+  }
+
+  &__option {
+    position: relative;
+    padding: 8px 18px;
+    font-size: 14px;
+    cursor: pointer;
+    user-select: none;
+    background: $color-surface;
+    color: $color-text-muted;
+    border-right: 1px solid $color-border;
+    transition: background 0.15s, color 0.15s;
+
+    &:last-child {
+      border-right: none;
+    }
+
+    &--active {
+      color: $color-text-inverse;
+      font-weight: 500;
+    }
+
+    &--yes.yes-no__option--active {
+      background: $color-success;
+    }
+
+    &--no.yes-no__option--active {
+      background: $color-danger;
+    }
+  }
+}

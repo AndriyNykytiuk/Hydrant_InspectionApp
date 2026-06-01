@@ -1,0 +1,17 @@
+-- AlterTable
+ALTER TABLE "Inspection" ADD COLUMN     "bodyOk" BOOLEAN,
+ADD COLUMN     "flowRateOk" BOOLEAN,
+ADD COLUMN     "lidOk" BOOLEAN,
+ADD COLUMN     "patrubCapOk" BOOLEAN,
+ADD COLUMN     "pressureOk" BOOLEAN,
+ADD COLUMN     "signMatchesOk" BOOLEAN,
+ADD COLUMN     "signReadableOk" BOOLEAN,
+ADD COLUMN     "stockHeightOk" BOOLEAN,
+ADD COLUMN     "stockOk" BOOLEAN,
+ADD COLUMN     "threadOk" BOOLEAN,
+ADD COLUMN     "tightnessOk" BOOLEAN,
+ADD COLUMN     "waterCleanOk" BOOLEAN,
+ADD COLUMN     "waterStartOk" BOOLEAN,
+ADD COLUMN     "wellDepthOk" BOOLEAN,
+ADD COLUMN     "wellDryOk" BOOLEAN,
+ADD COLUMN     "wellNeckOk" BOOLEAN;

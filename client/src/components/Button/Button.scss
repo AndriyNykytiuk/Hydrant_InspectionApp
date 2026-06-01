@@ -1,0 +1,76 @@
+@use '../../styles/variables' as *;
+
+.button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  border: 1px solid transparent;
+  border-radius: $radius-md;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.15s ease, border-color 0.15s ease, opacity 0.15s ease;
+  white-space: nowrap;
+  text-decoration: none;
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+
+  &--sm {
+    padding: 6px 10px;
+    font-size: 13px;
+  }
+
+  &--md {
+    padding: 8px 14px;
+    font-size: 14px;
+  }
+
+  &--lg {
+    padding: 12px 20px;
+    font-size: 16px;
+  }
+
+  &--full {
+    width: 100%;
+  }
+
+  &--primary {
+    background: $color-primary;
+    color: $color-text-inverse;
+
+    &:hover:not(:disabled) {
+      background: $color-primary-dark;
+    }
+  }
+
+  &--secondary {
+    background: $color-surface;
+    color: $color-text;
+    border-color: $color-border-strong;
+
+    &:hover:not(:disabled) {
+      background: $color-bg;
+    }
+  }
+
+  &--danger {
+    background: $color-danger;
+    color: $color-text-inverse;
+
+    &:hover:not(:disabled) {
+      filter: brightness(0.9);
+    }
+  }
+
+  &--ghost {
+    background: transparent;
+    color: $color-text;
+
+    &:hover:not(:disabled) {
+      background: $color-bg;
+    }
+  }
+}

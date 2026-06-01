@@ -1,0 +1,27 @@
+@use '../../styles/variables' as *;
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+
+  &__label {
+    font-size: 13px;
+    font-weight: 500;
+    color: $color-text;
+  }
+
+  &__control {
+    display: flex;
+  }
+
+  &__error {
+    font-size: 12px;
+    color: $color-danger;
+  }
+
+  &__hint {
+    font-size: 12px;
+    color: $color-text-muted;
+  }
+}

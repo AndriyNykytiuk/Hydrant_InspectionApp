@@ -1,0 +1,51 @@
+@use '../../styles/variables' as *;
+
+.inspect-page {
+  max-width: 560px;
+  margin: 0 auto;
+
+  &__title {
+    margin: 0 0 16px;
+    font-size: 22px;
+  }
+
+  &__loading,
+  &__error {
+    padding: 40px;
+    text-align: center;
+  }
+
+  &__error {
+    color: $color-danger;
+  }
+
+  &__success {
+    max-width: 420px;
+    margin: 40px auto;
+    background: $color-surface;
+    border-radius: $radius-lg;
+    padding: 32px;
+    text-align: center;
+    border: 1px solid $color-border;
+  }
+
+  &__success-icon {
+    width: 64px;
+    height: 64px;
+    border-radius: 50%;
+    background: $color-success;
+    color: #fff;
+    font-size: 36px;
+    margin: 0 auto 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  &__success-actions {
+    display: flex;
+    gap: 8px;
+    justify-content: center;
+    margin-top: 16px;
+  }
+}

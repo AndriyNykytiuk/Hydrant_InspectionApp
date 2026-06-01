@@ -1,0 +1,29 @@
+@use '../../styles/variables' as *;
+@use '../../styles/mixins' as *;
+
+.filters {
+  display: grid;
+  grid-template-columns: 2fr repeat(3, 1fr);
+  gap: 12px;
+  padding: 12px;
+  background: $color-surface;
+  border-radius: $radius-lg;
+  border: 1px solid $color-border;
+  margin-bottom: 16px;
+
+  @include mobile {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  &__field {
+    min-width: 0;
+  }
+
+  &__field--wide {
+    grid-column: span 1;
+
+    @include mobile {
+      grid-column: span 2;
+    }
+  }
+}

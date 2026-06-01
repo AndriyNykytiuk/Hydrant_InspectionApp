@@ -1,0 +1,80 @@
+@use '../../styles/variables' as *;
+@use '../../styles/mixins' as *;
+
+.admin-create {
+  &__title {
+    margin: 0 0 4px;
+    font-size: 22px;
+  }
+
+  &__subtitle {
+    margin: 0 0 16px;
+    color: $color-text-muted;
+    font-size: 13px;
+  }
+
+  &__brigade {
+    max-width: 320px;
+    margin-bottom: 16px;
+  }
+
+  &__table {
+    background: $color-surface;
+    border: 1px solid $color-border;
+    border-radius: $radius-lg;
+    padding: 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  &__row {
+    display: grid;
+    grid-template-columns: 32px 0.9fr 2fr 1fr 0.7fr 0.6fr 40px;
+    gap: 8px;
+    align-items: center;
+
+    @include mobile {
+      grid-template-columns: 1fr;
+      padding: 8px;
+      border: 1px solid $color-border;
+      border-radius: $radius-md;
+    }
+
+    &--head {
+      font-size: 11px;
+      color: $color-text-muted;
+      text-transform: uppercase;
+      padding-bottom: 4px;
+
+      @include mobile {
+        display: none;
+      }
+    }
+  }
+
+  &__index {
+    color: $color-text-muted;
+    text-align: center;
+    font-size: 13px;
+  }
+
+  &__add-row {
+    margin-top: 12px;
+  }
+
+  &__error {
+    background: rgba($color-danger, 0.1);
+    color: $color-danger;
+    padding: 10px 12px;
+    border-radius: $radius-md;
+    margin-top: 12px;
+  }
+
+  &__actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 8px;
+    margin-top: 16px;
+  }
+}
