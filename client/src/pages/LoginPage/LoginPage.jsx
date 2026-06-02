@@ -1,26 +1,57 @@
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { useAuth } from '../../auth/AuthContext.jsx';
 import { Button } from '../../components/Button/Button.jsx';
 import { Field } from '../../components/Field/Field.jsx';
 import { Input } from '../../components/Input/Input.jsx';
-import { extractError } from '../../api/client.js';
+import { extractError, pingHealth } from '../../api/client.js';
 import './LoginPage.scss';
+
+// Якщо відповідь бекенду не приходить за стільки мс — показуємо банер
+// «сервер прокидається» (Render присипляє free-сервіс при простої).
+const COLD_START_HINT_MS = 2500;
 
 export function LoginPage() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [waking, setWaking] = useState(false);
+  const wakeTimer = useRef(null);
   const { login } = useAuth();
   const navigate = useNavigate();
   const [params] = useSearchParams();
   const next = params.get('next') || '/hydrants';
 
+  const startWakeWatch = () => {
+    clearTimeout(wakeTimer.current);
+    wakeTimer.current = setTimeout(() => setWaking(true), COLD_START_HINT_MS);
+  };
+  const stopWakeWatch = () => {
+    clearTimeout(wakeTimer.current);
+    setWaking(false);
+  };
+
+  // Будимо сервер одразу при відкритті сторінки, поки користувач вводить дані.
+  useEffect(() => {
+    let cancelled = false;
+    startWakeWatch();
+    pingHealth()
+      .catch(() => {})
+      .finally(() => {
+        if (!cancelled) stopWakeWatch();
+      });
+    return () => {
+      cancelled = true;
+      clearTimeout(wakeTimer.current);
+    };
+  }, []);
+
   const onSubmit = async (e) => {
     e.preventDefault();
     setError(null);
     setLoading(true);
+    startWakeWatch();
     try {
       await login(email, password);
       navigate(next, { replace: true });
@@ -28,6 +59,7 @@ export function LoginPage() {
       setError(extractError(err));
     } finally {
       setLoading(false);
+      stopWakeWatch();
     }
   };
 
@@ -62,6 +94,13 @@ export function LoginPage() {
         </Field>
 
         {error && <div className="login-form__error">{error}</div>}
+
+        {waking && !error && (
+          <div className="login-form__waking" role="status">
+            <span className="login-form__spinner" aria-hidden="true" />
+            Сервер прокидається після простою — це може зайняти до хвилини. Зачекайте…
+          </div>
+        )}
 
         <Button type="submit" size="lg" fullWidth disabled={loading}>
           {loading ? 'Вхід...' : 'Увійти'}

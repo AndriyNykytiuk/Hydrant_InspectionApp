@@ -50,4 +50,32 @@
     font-size: 13px;
     border: 1px solid rgba($color-danger, 0.3);
   }
+
+  &__waking {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: rgba($color-info, 0.1);
+    color: darken($color-info, 12%);
+    padding: 10px 12px;
+    border-radius: $radius-md;
+    font-size: 13px;
+    border: 1px solid rgba($color-info, 0.3);
+  }
+
+  &__spinner {
+    flex: 0 0 auto;
+    width: 16px;
+    height: 16px;
+    border: 2px solid rgba($color-info, 0.3);
+    border-top-color: $color-info;
+    border-radius: 50%;
+    animation: login-spin 0.7s linear infinite;
+  }
+}
+
+@keyframes login-spin {
+  to {
+    transform: rotate(360deg);
+  }
 }

@@ -36,3 +36,7 @@ api.interceptors.response.use(
 
 export const extractError = (err) =>
   err?.response?.data?.error || err?.message || 'Невідома помилка';
+
+// Пінг бекенду — використовується, щоб «розбудити» сервер на free-плані
+// (Render присипляє сервіс при простої; перший запит може йти до хвилини).
+export const pingHealth = () => api.get('/health').then((r) => r.data);
