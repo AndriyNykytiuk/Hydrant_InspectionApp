@@ -1,5 +1,7 @@
 // Список ключів-чекбоксів окрім трьох "ядрових" (isWorking/cleanPath/banner).
 export const OPTIONAL_CHECK_FIELDS = [
+  'coverFreeOk',
+  'parkingFreeOk',
   'lidOk',
   'bodyOk',
   'patrubCapOk',
@@ -11,11 +13,15 @@ export const OPTIONAL_CHECK_FIELDS = [
   'pressureOk',
   'flowRateOk',
   'waterCleanOk',
+  'waterHitOk',
+  'drainValveOk',
   'wellDepthOk',
+  'wellInsulationOk',
   'wellDryOk',
   'wellNeckOk',
   'signReadableOk',
   'signMatchesOk',
+  'signLocationOk',
 ];
 
 export const serializeInspectionChecks = (i) => {

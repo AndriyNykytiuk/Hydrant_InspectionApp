@@ -29,6 +29,8 @@ const defectsFromInspection = (insp) => {
   if (!insp) return ['Не перевірено'];
   const map = {
     isWorking: 'не працює',
+    coverFreeOk: 'люк захаращений (сміття, бруд, лід)',
+    parkingFreeOk: 'доступ перекрито припаркованим транспортом',
     cleanPath: 'захаращений доступ до люка',
     lidOk: 'несправна кришка люка',
     bodyOk: 'пошкоджений корпус гідранта',
@@ -41,11 +43,15 @@ const defectsFromInspection = (insp) => {
     pressureOk: 'тиск не відповідає нормі',
     flowRateOk: 'водовіддача не відповідає нормі',
     waterCleanOk: 'сторонній вміст у воді',
+    waterHitOk: 'гідроудари під час / після відкриття',
+    drainValveOk: 'несправний дренажний (зливний) клапан',
     wellDepthOk: 'невідповідна глибина колодязя / висота гідранта',
+    wellInsulationOk: 'недостатнє утеплення колодязя',
     wellDryOk: 'колодязь підтоплений',
     wellNeckOk: 'пошкоджена горловина / скоби колодязя',
     signReadableOk: 'нечитабельний номер на табличці',
     signMatchesOk: 'невідповідність даних таблички',
+    signLocationOk: 'відсутній вказівник розташування ПГ',
   };
   for (const [key, label] of Object.entries(map)) {
     if (insp[key] === false) list.push(label);

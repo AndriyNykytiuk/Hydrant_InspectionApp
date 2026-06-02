@@ -72,6 +72,10 @@ model Inspection {
   cleanPath   Boolean
   banner      Boolean
 
+  // Location & access (Розташування та доступ)
+  coverFreeOk   Boolean?
+  parkingFreeOk Boolean?
+
   // External condition (Зовнішній стан)
   lidOk        Boolean?
   bodyOk       Boolean?
@@ -88,15 +92,19 @@ model Inspection {
   pressureOk   Boolean?
   flowRateOk   Boolean?
   waterCleanOk Boolean?
+  waterHitOk   Boolean?
+  drainValveOk Boolean?
 
   // Well condition (Стан колодязя)
-  wellDepthOk Boolean?
-  wellDryOk   Boolean?
-  wellNeckOk  Boolean?
+  wellDepthOk      Boolean?
+  wellInsulationOk Boolean?
+  wellDryOk        Boolean?
+  wellNeckOk       Boolean?
 
   // Marking (Маркування)
   signReadableOk Boolean?
   signMatchesOk  Boolean?
+  signLocationOk Boolean?
 
   weakness    String   @default("")
   createdAt   DateTime @default(now())
