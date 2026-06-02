@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../auth/AuthContext.jsx';
 import Hydrant from '../../pict/hydrant.svg';
@@ -6,6 +7,7 @@ import './Header.scss';
 export function Header() {
   const { user, logout, isGod } = useAuth();
   const navigate = useNavigate();
+  const [menuOpen, setMenuOpen] = useState(false);
 
   const handleLogout = () => {
     if (!confirm('Вийти з облікового запису?')) return;
@@ -21,7 +23,36 @@ export function Header() {
           <span className="header__title">Гідранти</span>
         </div>
 
-        <nav className="header__nav">
+        <button
+          type="button"
+          className="header__burger"
+          onClick={() => setMenuOpen((v) => !v)}
+          aria-label={menuOpen ? 'Закрити меню' : 'Відкрити меню'}
+          aria-expanded={menuOpen}
+          aria-controls="header-nav"
+        >
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+            strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+            {menuOpen ? (
+              <>
+                <line x1="18" y1="6" x2="6" y2="18" />
+                <line x1="6" y1="6" x2="18" y2="18" />
+              </>
+            ) : (
+              <>
+                <line x1="3" y1="6" x2="21" y2="6" />
+                <line x1="3" y1="12" x2="21" y2="12" />
+                <line x1="3" y1="18" x2="21" y2="18" />
+              </>
+            )}
+          </svg>
+        </button>
+
+        <nav
+          id="header-nav"
+          className={`header__nav ${menuOpen ? 'header__nav--open' : ''}`}
+          onClick={() => setMenuOpen(false)}
+        >
           <NavLink
             to="/hydrants"
             className={({ isActive }) =>

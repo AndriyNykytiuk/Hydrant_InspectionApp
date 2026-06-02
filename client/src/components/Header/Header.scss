@@ -47,15 +47,54 @@
     letter-spacing: 0.3px;
   }
 
+  &__burger {
+    @include button-reset;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    border-radius: $radius-md;
+    color: $color-text-inverse;
+    transition: background 0.15s;
+
+    &:hover {
+      background: rgba(255, 255, 255, 0.08);
+    }
+
+    &:focus-visible {
+      outline: 2px solid $color-text-inverse;
+      outline-offset: 2px;
+    }
+
+    @include mobile {
+      display: inline-flex;
+      order: 2;
+      margin-left: auto;
+    }
+  }
+
   &__nav {
     display: flex;
     gap: 4px;
     flex: 1;
 
     @include mobile {
+      order: 4;
       flex-basis: 100%;
-      order: 3;
-      overflow-x: auto;
+      flex: 0 0 100%;
+      flex-direction: column;
+      gap: 2px;
+      display: none;
+      padding-top: 8px;
+      margin-top: 4px;
+      border-top: 1px solid rgba(255, 255, 255, 0.12);
+    }
+
+    &--open {
+      @include mobile {
+        display: flex;
+      }
     }
   }
 
@@ -85,6 +124,10 @@
     display: flex;
     align-items: center;
     gap: 12px;
+
+    @include mobile {
+      order: 3;
+    }
   }
 
   &__user-info {
