@@ -1,13 +1,16 @@
-import { useState } from 'react';
-import { NavLink, useNavigate } from 'react-router-dom';
+import { useEffect, useState } from 'react';
+import { NavLink, useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../../auth/AuthContext.jsx';
+import { listHydrants } from '../../api/hydrants.js';
 import Hydrant from '../../pict/hydrant.svg';
 import './Header.scss';
 
 export function Header() {
   const { user, logout, isGod, canViewAll } = useAuth();
   const navigate = useNavigate();
+  const location = useLocation();
   const [menuOpen, setMenuOpen] = useState(false);
+  const [defectCount, setDefectCount] = useState(0);
 
   const handleLogout = () => {
     if (!confirm('Вийти з облікового запису?')) return;
@@ -15,9 +18,17 @@ export function Header() {
     navigate('/login');
   };
 
+  // Кількість несправних гідрантів для бейджа (оновлюємо при зміні сторінки).
+  useEffect(() => {
+    if (!canViewAll) return;
+    listHydrants({ status: 'defect' })
+      .then((d) => setDefectCount(d.length))
+      .catch(() => {});
+  }, [canViewAll, location.pathname]);
+
   const navLinks = [
     { to: '/hydrants', label: 'Пожежні гідранти', show: true },
-    { to: '/defects', label: 'Несправні', show: canViewAll },
+    { to: '/defects', label: 'Несправні гідранти', show: canViewAll, badge: defectCount },
     { to: '/admin/brigades', label: 'Частини', show: isGod },
     { to: '/admin/users', label: 'Користувачі', show: isGod },
     { to: '/admin/hydrants/new', label: 'Додати гідранти', show: isGod },
@@ -94,6 +105,7 @@ export function Header() {
                 }
               >
                 {l.label}
+                {l.badge > 0 && <span className="header__badge">{l.badge}</span>}
               </NavLink>
             ))}
         </nav>
