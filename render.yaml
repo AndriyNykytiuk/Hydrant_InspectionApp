@@ -5,7 +5,7 @@ services:
     plan: free
     rootDir: server
     buildCommand: npm install && npx prisma generate
-    startCommand: npx prisma migrate deploy && node src/index.js
+    startCommand: npx prisma migrate deploy && node prisma/seed.js && node src/index.js
     healthCheckPath: /api/health
     envVars:
       - key: NODE_VERSION
@@ -21,6 +21,10 @@ services:
       - key: APP_URL
         sync: false
       - key: CORS_ORIGIN
+        sync: false
+      - key: SEED_GOD_EMAIL
+        sync: false
+      - key: SEED_GOD_PASSWORD
         sync: false
 
   - type: web
