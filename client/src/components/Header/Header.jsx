@@ -15,6 +15,13 @@ export function Header() {
     navigate('/login');
   };
 
+  const navLinks = [
+    { to: '/hydrants', label: 'Пожежні гідранти', show: true },
+    { to: '/admin/brigades', label: 'Частини', show: isGod },
+    { to: '/admin/users', label: 'Користувачі', show: isGod },
+    { to: '/admin/hydrants/new', label: 'Додати гідранти', show: isGod },
+  ];
+
   return (
     <header className="header">
       <div className="header__inner">
@@ -48,47 +55,46 @@ export function Header() {
           </svg>
         </button>
 
+        <div
+          className={`header__backdrop ${menuOpen ? 'header__backdrop--open' : ''}`}
+          onClick={() => setMenuOpen(false)}
+          aria-hidden="true"
+        />
+
         <nav
           id="header-nav"
           className={`header__nav ${menuOpen ? 'header__nav--open' : ''}`}
-          onClick={() => setMenuOpen(false)}
         >
-          <NavLink
-            to="/hydrants"
-            className={({ isActive }) =>
-              `header__link ${isActive ? 'header__link--active' : ''}`
-            }
-          >
-            Пожежні гідранти
-          </NavLink>
-          {isGod && (
-            <>
+          <div className="header__nav-head">
+            <span className="header__nav-title">Меню</span>
+            <button
+              type="button"
+              className="header__nav-close"
+              onClick={() => setMenuOpen(false)}
+              aria-label="Закрити меню"
+            >
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                <line x1="18" y1="6" x2="6" y2="18" />
+                <line x1="6" y1="6" x2="18" y2="18" />
+              </svg>
+            </button>
+          </div>
+
+          {navLinks
+            .filter((l) => l.show)
+            .map((l) => (
               <NavLink
-                to="/admin/brigades"
+                key={l.to}
+                to={l.to}
+                onClick={() => setMenuOpen(false)}
                 className={({ isActive }) =>
                   `header__link ${isActive ? 'header__link--active' : ''}`
                 }
               >
-              Частини
+                {l.label}
               </NavLink>
-              <NavLink
-                to="/admin/users"
-                className={({ isActive }) =>
-                  `header__link ${isActive ? 'header__link--active' : ''}`
-                }
-              >
-                Користувачі
-              </NavLink>
-              <NavLink
-                to="/admin/hydrants/new"
-                className={({ isActive }) =>
-                  `header__link ${isActive ? 'header__link--active' : ''}`
-                }
-              >
-                Додати гідранти
-              </NavLink>
-            </>
-          )}
+            ))}
         </nav>
 
         <div className="header__user">
