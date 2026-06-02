@@ -60,3 +60,17 @@ export const ALL_CHECK_KEYS = [
 export const OPTIONAL_CHECK_KEYS = CHECKLIST_SECTIONS.flatMap((s) =>
   s.items.filter((i) => !['cleanPath', 'banner'].includes(i.key)).map((i) => i.key)
 );
+
+// Список текстів виявлених недоліків для перевірки (failed-пункти + вільний коментар).
+export function getInspectionDefects(insp) {
+  if (!insp) return [];
+  const defects = [];
+  if (insp[OVERALL_KEY] === false) defects.push(OVERALL_DEFECT);
+  for (const section of CHECKLIST_SECTIONS) {
+    for (const item of section.items) {
+      if (insp[item.key] === false) defects.push(item.defect);
+    }
+  }
+  if (insp.weakness?.trim()) defects.push(insp.weakness.trim());
+  return defects;
+}

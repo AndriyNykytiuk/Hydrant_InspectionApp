@@ -4,6 +4,7 @@ import { ProtectedRoute } from './auth/ProtectedRoute.jsx';
 import { Layout } from './components/Layout/Layout.jsx';
 import { LoginPage } from './pages/LoginPage/LoginPage.jsx';
 import { HydrantsPage } from './pages/HydrantsPage/HydrantsPage.jsx';
+import { DefectsPage } from './pages/DefectsPage/DefectsPage.jsx';
 import { HydrantDetailPage } from './pages/HydrantDetailPage/HydrantDetailPage.jsx';
 import { InspectPage } from './pages/InspectPage/InspectPage.jsx';
 import { AdminBrigadesPage } from './pages/AdminBrigadesPage/AdminBrigadesPage.jsx';
@@ -26,6 +27,14 @@ export default function App() {
           >
             <Route index element={<Navigate to="/hydrants" replace />} />
             <Route path="/hydrants" element={<HydrantsPage />} />
+            <Route
+              path="/defects"
+              element={
+                <ProtectedRoute roles={['god', 'viewer']}>
+                  <DefectsPage />
+                </ProtectedRoute>
+              }
+            />
             <Route path="/hydrants/:id" element={<HydrantDetailPage />} />
             <Route path="/inspect/:hydrantId" element={<InspectPage />} />
             <Route

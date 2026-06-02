@@ -5,7 +5,7 @@ import Hydrant from '../../pict/hydrant.svg';
 import './Header.scss';
 
 export function Header() {
-  const { user, logout, isGod } = useAuth();
+  const { user, logout, isGod, canViewAll } = useAuth();
   const navigate = useNavigate();
   const [menuOpen, setMenuOpen] = useState(false);
 
@@ -17,6 +17,7 @@ export function Header() {
 
   const navLinks = [
     { to: '/hydrants', label: 'Пожежні гідранти', show: true },
+    { to: '/defects', label: 'Несправні', show: canViewAll },
     { to: '/admin/brigades', label: 'Частини', show: isGod },
     { to: '/admin/users', label: 'Користувачі', show: isGod },
     { to: '/admin/hydrants/new', label: 'Додати гідранти', show: isGod },

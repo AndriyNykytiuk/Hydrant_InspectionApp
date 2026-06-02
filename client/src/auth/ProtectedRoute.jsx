@@ -1,7 +1,7 @@
 import { Navigate, useLocation } from 'react-router-dom';
 import { useAuth } from './AuthContext.jsx';
 
-export function ProtectedRoute({ children, role }) {
+export function ProtectedRoute({ children, role, roles }) {
   const { user, loading } = useAuth();
   const location = useLocation();
 
@@ -10,7 +10,8 @@ export function ProtectedRoute({ children, role }) {
     const next = encodeURIComponent(location.pathname + location.search);
     return <Navigate to={`/login?next=${next}`} replace />;
   }
-  if (role && user.role !== role) {
+  const allowed = roles || (role ? [role] : null);
+  if (allowed && !allowed.includes(user.role)) {
     return <Navigate to="/hydrants" replace />;
   }
   return children;
