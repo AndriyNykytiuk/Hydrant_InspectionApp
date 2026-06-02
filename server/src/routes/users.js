@@ -113,7 +113,11 @@ router.delete(
     const id = Number(req.params.id);
     const user = await prisma.user.findFirst({ where: { id, deletedAt: null } });
     if (!user) throw notFound('Користувача не знайдено');
-    if (user.role === 'god') throw badRequest('Не можна видалити god-користувача');
+    if (user.id === req.user.id) throw badRequest('Не можна видалити власний обліковий запис');
+    if (user.role === 'god') {
+      const gods = await prisma.user.count({ where: { role: 'god', deletedAt: null } });
+      if (gods <= 1) throw badRequest('Не можна видалити останнього адміністратора');
+    }
     await prisma.user.update({ where: { id }, data: { deletedAt: new Date() } });
     res.json({ ok: true });
   })

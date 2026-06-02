@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { useAuth } from '../../auth/AuthContext.jsx';
 import { listUsers, createUser, deleteUser } from '../../api/users.js';
 import { listBrigades } from '../../api/brigades.js';
 import { extractError } from '../../api/client.js';
@@ -11,6 +12,7 @@ import './AdminUsersPage.scss';
 const initialForm = { email: '', fullName: '', password: '', brigadeId: '', role: 'rw' };
 
 export function AdminUsersPage() {
+  const { user: currentUser } = useAuth();
   const [users, setUsers] = useState([]);
   const [brigades, setBrigades] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -163,7 +165,7 @@ export function AdminUsersPage() {
                 </td>
                 <td>{u.brigade?.name || '—'}</td>
                 <td>
-                  {u.role !== 'god' && (
+                  {u.id !== currentUser?.id && (
                     <Button size="sm" variant="ghost" onClick={() => onDelete(u)}>
                       Видалити
                     </Button>
