@@ -14,11 +14,24 @@ import {
 } from './checklist.js';
 import './InspectionForm.scss';
 
-const initialState = () =>
-  Object.fromEntries(ALL_CHECK_KEYS.map((k) => [k, null]));
+// Якщо гідрант уже перевіряли — переносимо попередні відповіді, щоб інспектор
+// міняв лише те, що змінилось. Нові пункти (яких не було в тій перевірці) лишаються
+// без відповіді.
+const initialState = (latest) =>
+  Object.fromEntries(
+    ALL_CHECK_KEYS.map((k) => [k, typeof latest?.[k] === 'boolean' ? latest[k] : null])
+  );
+
+const formatDate = (d) =>
+  new Date(d).toLocaleDateString('uk-UA', {
+    day: '2-digit',
+    month: '2-digit',
+    year: 'numeric',
+  });
 
 export function InspectionForm({ hydrant, onSaved, onCancel }) {
-  const [checks, setChecks] = useState(initialState);
+  const latest = hydrant.latestInspection;
+  const [checks, setChecks] = useState(() => initialState(latest));
   const [weakness, setWeakness] = useState('');
   const [files, setFiles] = useState([]);
   const [saving, setSaving] = useState(false);
@@ -71,6 +84,13 @@ export function InspectionForm({ hydrant, onSaved, onCancel }) {
       </div>
 
  
+
+      {latest && (
+        <div className="inspection-form__carryover">
+          Відповіді перенесено з перевірки від {formatDate(latest.createdAt)}
+          {latest.inspector?.fullName ? ` (${latest.inspector.fullName})` : ''}. Змініть лише те, що відрізняється, і збережіть.
+        </div>
+      )}
 
       {CHECKLIST_SECTIONS.map((section) => (
         <fieldset key={section.title} className="inspection-form__section">
