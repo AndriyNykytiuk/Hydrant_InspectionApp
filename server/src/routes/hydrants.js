@@ -95,6 +95,9 @@ router.get(
     if (status === 'ok') serialized = serialized.filter((h) => !h.hasDefect && h.latestInspection);
     if (status === 'not-inspected')
       serialized = serialized.filter((h) => !h.latestInspection);
+    // Сортуємо за номером від меншого до більшого (числово: 2 перед 10).
+    const collator = new Intl.Collator('uk', { numeric: true, sensitivity: 'base' });
+    serialized.sort((a, b) => collator.compare(a.number, b.number));
     res.json(serialized);
   })
 );
