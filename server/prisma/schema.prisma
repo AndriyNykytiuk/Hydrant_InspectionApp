@@ -68,43 +68,14 @@ model Inspection {
   hydrant     Hydrant  @relation(fields: [hydrantId], references: [id])
   inspectorId Int
   inspector   User     @relation(fields: [inspectorId], references: [id])
-  isWorking   Boolean
-  cleanPath   Boolean
-  banner      Boolean
 
-  // Location & access (Розташування та доступ)
-  coverFreeOk   Boolean?
-  parkingFreeOk Boolean?
+  // Загальний стан гідранта (Q1 — "перебуває у справному стані?").
+  isWorking Boolean
 
-  // External condition (Зовнішній стан)
-  lidOk        Boolean?
-  bodyOk       Boolean?
-  patrubCapOk  Boolean?
-
-  // Technical condition (Технічний стан)
-  stockOk       Boolean?
-  tightnessOk   Boolean?
-  threadOk      Boolean?
-  stockHeightOk Boolean?
-
-  // Water flow check (Перевірка з пуском води)
-  waterStartOk Boolean?
-  pressureOk   Boolean?
-  flowRateOk   Boolean?
-  waterCleanOk Boolean?
-  waterHitOk   Boolean?
-  drainValveOk Boolean?
-
-  // Well condition (Стан колодязя)
-  wellDepthOk      Boolean?
-  wellInsulationOk Boolean?
-  wellDryOk        Boolean?
-  wellNeckOk       Boolean?
-
-  // Marking (Маркування)
-  signReadableOk Boolean?
-  signMatchesOk  Boolean?
-  signLocationOk Boolean?
+  // Відповіді на пункти перевірки: map { questionKey: boolean | null }.
+  // Перелік питань визначається в client checklist.js — єдине джерело правди,
+  // тож зміна списку питань не потребує міграції БД.
+  checks Json @default("{}")
 
   weakness    String   @default("")
   createdAt   DateTime @default(now())

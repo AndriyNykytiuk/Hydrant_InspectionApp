@@ -24,37 +24,36 @@ const formatActDate = (d = new Date()) => {
   return { day, month, year };
 };
 
+// Тексти недоліків для акта. `isWorking` — окрема колонка, решта — у insp.checks.
+const OVERALL_DEFECT = 'ПГ несправний';
+const CHECK_DEFECTS = {
+  stacksDrained: 'стояки підземних гідрантів не звільнені від води на зимовий період',
+  biannualCheck: 'перевірка працездатності ПГ не проводиться двічі на рік (навесні/восени)',
+  waterSupplyNorm: 'мережа не забезпечує потрібних витрати води / тиску для пожежогасіння',
+  accessYearRound: "немає вільного під'їзду пожежних автомобілів у будь-яку пору року",
+  hardSurface: "під'їзд до ПГ не має твердого покриття",
+  snowCleared: 'підступи / дороги до гідранта не очищені від снігу',
+  noParkingZone: 'транспорт паркується ближче ніж 5 м від ПГ',
+  signPresent: 'відсутній покажчик місця розташування ПГ',
+  signInfoComplete: 'покажчик не містить повної інформації (індекс «ПГ», відстань, діаметр, вид мережі)',
+  signLighting: 'немає освітлення для пошуку покажчиків ПГ у нічний час',
+  lidRed: 'кришки люків колодязів не пофарбовані в червоний колір',
+  lidHandles: 'кришки люків не мають втоплюваних ручок',
+  lidClean: 'кришки люків забруднені (бруд, лід, сніг)',
+  lidInsulated: 'люки колодязів не утеплені на холодний період',
+  shutdownAgreed: 'тимчасове відключення гідрантів не погоджено з пожежною охороною',
+  pressureDropAlert: 'пожежна охорона не сповіщається про зниження тиску в мережі',
+  noOpenFlame: 'для відігрівання замерзлих гідрантів використовується відкритий вогонь',
+  maintenanceLogged: 'результати техобслуговування / ремонту не документуються',
+};
+
 const defectsFromInspection = (insp) => {
-  const list = [];
   if (!insp) return ['Не перевірено'];
-  const map = {
-    isWorking: 'не працює',
-    coverFreeOk: 'люк захаращений (сміття, бруд, лід)',
-    parkingFreeOk: 'доступ перекрито припаркованим транспортом',
-    cleanPath: 'захаращений доступ до люка',
-    lidOk: 'несправна кришка люка',
-    bodyOk: 'пошкоджений корпус гідранта',
-    patrubCapOk: 'несправна кришка патрубка',
-    stockOk: 'несправний шток / клапан',
-    tightnessOk: 'негерметичний (підтікання)',
-    threadOk: 'пошкоджена різьба патрубка',
-    stockHeightOk: 'невідповідна висота підйому штока',
-    waterStartOk: 'не подається вода через колонку',
-    pressureOk: 'тиск не відповідає нормі',
-    flowRateOk: 'водовіддача не відповідає нормі',
-    waterCleanOk: 'сторонній вміст у воді',
-    waterHitOk: 'гідроудари під час / після відкриття',
-    drainValveOk: 'несправний дренажний (зливний) клапан',
-    wellDepthOk: 'невідповідна глибина колодязя / висота гідранта',
-    wellInsulationOk: 'недостатнє утеплення колодязя',
-    wellDryOk: 'колодязь підтоплений',
-    wellNeckOk: 'пошкоджена горловина / скоби колодязя',
-    signReadableOk: 'нечитабельний номер на табличці',
-    signMatchesOk: 'невідповідність даних таблички',
-    signLocationOk: 'відсутній вказівник розташування ПГ',
-  };
-  for (const [key, label] of Object.entries(map)) {
-    if (insp[key] === false) list.push(label);
+  const list = [];
+  if (insp.isWorking === false) list.push(OVERALL_DEFECT);
+  const checks = insp.checks ?? {};
+  for (const [key, label] of Object.entries(CHECK_DEFECTS)) {
+    if (checks[key] === false) list.push(label);
   }
   if (insp.weakness?.trim()) list.push(insp.weakness.trim());
   return list.length ? list : ['—'];
@@ -173,7 +172,8 @@ export async function buildDefectActDocx({
   const dataRows = hydrantsWithDefects.map((h, idx) => {
     const insp = h.latestInspection;
     const defects = defectsFromInspection(insp).join('; ');
-    const bannerStatus = insp?.banner === false ? 'відсутній' : insp?.banner === true ? 'наявний' : '—';
+    const signPresent = insp?.checks?.signPresent;
+    const bannerStatus = signPresent === false ? 'відсутній' : signPresent === true ? 'наявний' : '—';
     const brigadeNote = aggregated && h.brigade?.name ? ` (${h.brigade.name})` : '';
     return new TableRow({
       children: [

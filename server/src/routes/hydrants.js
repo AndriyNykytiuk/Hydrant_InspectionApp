@@ -52,8 +52,6 @@ const serializeHydrant = (h) => {
           id: latest.id,
           createdAt: latest.createdAt,
           isWorking: latest.isWorking,
-          cleanPath: latest.cleanPath,
-          banner: latest.banner,
           weakness: latest.weakness,
           ...serializeInspectionChecks(latest),
           inspector: latest.inspector

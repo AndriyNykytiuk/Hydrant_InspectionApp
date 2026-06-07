@@ -9,7 +9,8 @@ import { asyncHandler } from '../utils/asyncHandler.js';
 import { requireAuth, isGod, isViewer, canViewAll } from '../middleware/auth.js';
 import { badRequest, forbidden, notFound } from '../utils/errors.js';
 import {
-  OPTIONAL_CHECK_FIELDS,
+  CHECK_KEYS,
+  collectChecks,
   serializeInspectionChecks,
 } from '../utils/inspectionFields.js';
 
@@ -43,11 +44,9 @@ const tribool = (v) => (v === undefined || v === '' || v === null ? null : boolF
 
 const inspectionBodySchema = z.object({
   isWorking: z.boolean(),
-  cleanPath: z.boolean(),
-  banner: z.boolean(),
   weakness: z.string().max(2000).default(''),
-  ...Object.fromEntries(
-    OPTIONAL_CHECK_FIELDS.map((k) => [k, z.boolean().nullable().optional()])
+  checks: z.object(
+    Object.fromEntries(CHECK_KEYS.map((k) => [k, z.boolean().nullable()]))
   ),
 });
 
@@ -55,8 +54,6 @@ const serializeInspection = (i) => ({
   id: i.id,
   createdAt: i.createdAt,
   isWorking: i.isWorking,
-  cleanPath: i.cleanPath,
-  banner: i.banner,
   weakness: i.weakness,
   ...serializeInspectionChecks(i),
   inspector: i.inspector
@@ -100,13 +97,9 @@ router.post(
 
     const payload = {
       isWorking: boolFromForm(req.body.isWorking),
-      cleanPath: boolFromForm(req.body.cleanPath),
-      banner: boolFromForm(req.body.banner),
       weakness: req.body.weakness ?? '',
+      checks: collectChecks((k) => tribool(req.body[k])),
     };
-    for (const k of OPTIONAL_CHECK_FIELDS) {
-      payload[k] = tribool(req.body[k]);
-    }
 
     const parsed = inspectionBodySchema.safeParse(payload);
     if (!parsed.success) {
