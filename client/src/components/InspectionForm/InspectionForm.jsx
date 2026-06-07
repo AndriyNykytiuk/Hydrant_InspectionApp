@@ -11,6 +11,8 @@ import {
   OVERALL_KEY,
   OVERALL_LABEL,
   ALL_CHECK_KEYS,
+  WATER_TEST_KEYS,
+  GATE_LABEL,
 } from './checklist.js';
 import './InspectionForm.scss';
 
@@ -32,6 +34,10 @@ const formatDate = (d) =>
 export function InspectionForm({ hydrant, onSaved, onCancel }) {
   const latest = hydrant.latestInspection;
   const [checks, setChecks] = useState(() => initialState(latest));
+  // Пуск води вмикаємо автоматично, якщо у попередній перевірці на ці пункти відповідали.
+  const [waterTested, setWaterTested] = useState(() =>
+    WATER_TEST_KEYS.some((k) => typeof latest?.[k] === 'boolean')
+  );
   const [weakness, setWeakness] = useState('');
   const [files, setFiles] = useState([]);
   const [saving, setSaving] = useState(false);
@@ -39,7 +45,23 @@ export function InspectionForm({ hydrant, onSaved, onCancel }) {
 
   const setCheck = (key, value) => setChecks((c) => ({ ...c, [key]: value }));
 
-  const unanswered = ALL_CHECK_KEYS.filter((k) => checks[k] === null);
+  // Перемикач "Перевірка з пуском води": при вимкненні скидаємо відповіді секції.
+  const toggleWaterTest = (on) => {
+    setWaterTested(on);
+    if (!on) {
+      setChecks((c) => {
+        const next = { ...c };
+        for (const k of WATER_TEST_KEYS) next[k] = null;
+        return next;
+      });
+    }
+  };
+
+  // Пункти секції з пуском води не вимагаються, поки чекбокс вимкнено.
+  const requiredKeys = waterTested
+    ? ALL_CHECK_KEYS
+    : ALL_CHECK_KEYS.filter((k) => !WATER_TEST_KEYS.includes(k));
+  const unanswered = requiredKeys.filter((k) => checks[k] === null);
   const ready = unanswered.length === 0;
 
   const onSubmit = async (e) => {
@@ -95,16 +117,30 @@ export function InspectionForm({ hydrant, onSaved, onCancel }) {
       {CHECKLIST_SECTIONS.map((section) => (
         <fieldset key={section.title} className="inspection-form__section">
           <legend className="inspection-form__section-title">{section.title}</legend>
-          {section.items.map((item) => (
-            <Field key={item.key} label={item.label}>
-              <YesNo
-                name={item.key}
-                value={checks[item.key]}
-                onChange={(v) => setCheck(item.key, v)}
+
+          {section.gated && (
+            <label className="inspection-form__gate">
+              <input
+                type="checkbox"
+                checked={waterTested}
+                onChange={(e) => toggleWaterTest(e.target.checked)}
                 disabled={saving}
               />
-            </Field>
-          ))}
+              <span>{GATE_LABEL}</span>
+            </label>
+          )}
+
+          {(!section.gated || waterTested) &&
+            section.items.map((item) => (
+              <Field key={item.key} label={item.label}>
+                <YesNo
+                  name={item.key}
+                  value={checks[item.key]}
+                  onChange={(v) => setCheck(item.key, v)}
+                  disabled={saving}
+                />
+              </Field>
+            ))}
         </fieldset>
       ))}
 

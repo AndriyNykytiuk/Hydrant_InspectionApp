@@ -71,4 +71,21 @@
     text-transform: uppercase;
     letter-spacing: 0.4px;
   }
+
+  &__gate {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 14px;
+    font-weight: 500;
+    color: $color-text;
+    cursor: pointer;
+
+    input {
+      width: 18px;
+      height: 18px;
+      accent-color: $color-primary;
+      cursor: pointer;
+    }
+  }
 }

@@ -2,29 +2,29 @@
 // Має збігатися з пунктами в client checklist.js (без "ядрового" isWorking).
 // Загальний стан гідранта зберігається окремо в колонці isWorking.
 export const CHECK_KEYS = [
-  // Технічний стан та працездатність
-  'stacksDrained',
-  'biannualCheck',
-  'waterSupplyNorm',
   // Доступність та під'їзні шляхи
-  'accessYearRound',
   'hardSurface',
-  'snowCleared',
-  'noParkingZone',
+  'accessClear',
   // Маркування та вказівники
   'signPresent',
   'signInfoComplete',
   'signLighting',
-  // Утримання колодязів (підземні ПГ)
+  // Утримання колодязів
   'lidRed',
   'lidHandles',
-  'lidClean',
   'lidInsulated',
-  // Експлуатація та безпека
-  'shutdownAgreed',
-  'pressureDropAlert',
-  'noOpenFlame',
-  'maintenanceLogged',
+  'wellNotFlooded',
+  'groundingPresent',
+  'groundingClean',
+  'groundingMarked',
+  // Технічний стан та пуск води (заповнюється лише за перевірки з пуском води)
+  'capPresent',
+  'columnMounts',
+  'opensEasily',
+  'waterClean',
+  'noWaterHammer',
+  'pressureNorm',
+  'drainOk',
 ];
 
 // Збираємо map відповідей із вхідних полів форми (tri-state: true/false/null).
